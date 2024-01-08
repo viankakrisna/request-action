@@ -11,7 +11,7 @@ async function main() {
 
   try {
     const octokit = new Octokit();
-    const { route, ...parameters } = getAllInputs();
+    const { route, silent, ...parameters } = getAllInputs();
 
     core.info(route);
     for (const [name, value] of Object.entries(parameters)) {
@@ -54,7 +54,9 @@ async function main() {
 
     core.setOutput("status", error.status);
     core.debug(inspect(error));
-    core.setFailed(error.message);
+    if (!silent) {
+      core.setFailed(error.message);
+    }
   }
 }
 
